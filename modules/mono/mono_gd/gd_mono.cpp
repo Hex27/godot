@@ -577,7 +577,7 @@ godot_plugins_initialize_fn initialize_monovm_and_godot_plugins(bool &r_runtime_
 
 	ERR_FAIL_NULL_V_MSG(root_domain, nullptr, ".NET: Failed to load root domain.");
 
-	String assembly_name = Path::get_csharp_project_name();
+	String assembly_name = path::get_csharp_project_name();
 	MonoAssemblyName *aname = mono_assembly_name_new(assembly_name.utf8().get_data());
 	ERR_FAIL_NULL_V_MSG(aname, nullptr, ".NET: Failed to parse assembly name '" + assembly_name + "'.");
 
