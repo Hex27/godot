@@ -2071,7 +2071,7 @@ void GD_CLR_STDCALL CSharpScript::_add_property_info_list_callback(CSharpScript 
 		StringName name = *reinterpret_cast<const StringName *>(&prop.name);
 		String hint_string = *reinterpret_cast<const String *>(&prop.hint_string);
 
-		PropertyInfo pinfo(prop.type, name, prop.hint, hint_string, prop.usage);
+		PropertyInfo pinfo(prop.type, name, prop.hint, hint_string, prop.usage, prop.class_name);
 
 		p_script->member_info[name] = pinfo;
 
