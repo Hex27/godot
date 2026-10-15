@@ -83,7 +83,7 @@ void godot_icall_GodotSharpDirs_DataEditorToolsDir(String *r_dest) {
 
 
 void godot_icall_GodotSharpDirs_CSharpProjectName(String *r_dest) {
-	memnew_placement(r_dest, String(Path::get_csharp_project_name()));
+	memnew_placement(r_dest, String(path::get_csharp_project_name()));
 }
 
 void godot_icall_EditorProgress_Create(const String *p_task, const String *p_label, int32_t p_amount, bool p_can_cancel) {
@@ -99,7 +99,7 @@ bool godot_icall_EditorProgress_Step(const String *p_task, const String *p_state
 }
 
 void godot_icall_Internal_FullExportTemplatesDir(String *r_dest) {
-	String full_templates_dir = EditorPaths::get_singleton()->get_export_templates_dir().path_join(GODOT_VERSION_FULL_CONFIG);
+	String full_templates_dir = EditorPaths::get_singleton()->get_export_templates_dir().path_join(VERSION_FULL_CONFIG);
 	memnew_placement(r_dest, String(full_templates_dir));
 }
 
@@ -113,7 +113,8 @@ bool godot_icall_Internal_IsMacOSAppBundleInstalled(const String *p_bundle_id) {
 }
 
 bool godot_icall_Internal_LipOCreateFile(const String *p_output_path, const PackedStringArray *p_files) {
-	return LipO::create_file(*p_output_path, *p_files);
+    LipO lip;
+	return lip.create_file(*p_output_path, *p_files);
 }
 
 bool godot_icall_Internal_GodotIs32Bits() {
