@@ -530,6 +530,26 @@ MonoAssembly *load_assembly_from_pck(MonoAssemblyName *p_assembly_name, char **p
 }
 #endif // ANDROID_ENABLED || WEB_ENABLED
 
+#ifndef TOOLS_ENABLED
+String make_tpa_list() {
+	String tpa_list;
+
+#if defined(WINDOWS_ENABLED)
+	String separator = ";";
+#else
+	String separator = ":";
+#endif
+
+	String assemblies_dir = GodotSharpDirs::get_api_assemblies_dir();
+	PackedStringArray files = DirAccess::get_files_at(assemblies_dir);
+	for (const String &file : files) {
+		tpa_list += assemblies_dir.path_join(file);
+		tpa_list += separator;
+	}
+
+	return tpa_list;
+}
+#endif //TOOLS_ENABLED
 #ifndef WEB_ENABLED
 godot_plugins_initialize_fn initialize_coreclr_and_godot_plugins(bool &r_runtime_initialized) {
 	godot_plugins_initialize_fn godot_plugins_initialize = nullptr;

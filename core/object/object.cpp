@@ -260,6 +260,7 @@ void Object::set(const StringName &p_name, const Variant &p_value, bool *r_valid
 
 	_edited = true;
 #endif
+	OS::get_singleton()->print("Object::set\n");
 
 	if (script_instance) {
 		if (script_instance->set(p_name, p_value)) {
@@ -269,6 +270,7 @@ void Object::set(const StringName &p_name, const Variant &p_value, bool *r_valid
 			return;
 		}
 	}
+	OS::get_singleton()->print("Object::set\n");
 
 	if (_extension && _extension->set) {
 		if (_extension->set(_extension_instance, (GDExtensionConstStringNamePtr)&p_name, (GDExtensionConstVariantPtr)&p_value)) {
@@ -278,6 +280,7 @@ void Object::set(const StringName &p_name, const Variant &p_value, bool *r_valid
 			return;
 		}
 	}
+	OS::get_singleton()->print("Object::set\n");
 
 	// Try built-in setter.
 	{
@@ -285,6 +288,7 @@ void Object::set(const StringName &p_name, const Variant &p_value, bool *r_valid
 			return;
 		}
 	}
+	OS::get_singleton()->print("Object::set\n");
 
 	if (p_name == CoreStringName(script)) {
 		set_script(p_value);
@@ -292,6 +296,7 @@ void Object::set(const StringName &p_name, const Variant &p_value, bool *r_valid
 			*r_valid = true;
 		}
 		return;
+	OS::get_singleton()->print("Object::set\n");
 
 	} else {
 		Variant **V = metadata_properties.getptr(p_name);
@@ -309,6 +314,7 @@ void Object::set(const StringName &p_name, const Variant &p_value, bool *r_valid
 			}
 			return;
 		}
+	    OS::get_singleton()->print("Object::set\n");
 	}
 
 #ifdef TOOLS_ENABLED
@@ -322,6 +328,7 @@ void Object::set(const StringName &p_name, const Variant &p_value, bool *r_valid
 			return;
 		}
 	}
+	OS::get_singleton()->print("Object::set\n");
 #endif
 
 	// Something inside the object... :|
@@ -332,6 +339,7 @@ void Object::set(const StringName &p_name, const Variant &p_value, bool *r_valid
 		}
 		return;
 	}
+	OS::get_singleton()->print("Object::set\n");
 
 	if (r_valid) {
 		*r_valid = false;
@@ -340,6 +348,7 @@ void Object::set(const StringName &p_name, const Variant &p_value, bool *r_valid
 
 Variant Object::get(const StringName &p_name, bool *r_valid) const {
 	Variant ret;
+	OS::get_singleton()->print("Object::get\n");
 
 	if (script_instance) {
 		if (script_instance->get(p_name, ret)) {
@@ -349,6 +358,7 @@ Variant Object::get(const StringName &p_name, bool *r_valid) const {
 			return ret;
 		}
 	}
+	OS::get_singleton()->print("Object::get\n");
 	if (_extension && _extension->get) {
 		if (_extension->get(_extension_instance, (GDExtensionConstStringNamePtr)&p_name, (GDExtensionVariantPtr)&ret)) {
 			if (r_valid) {
@@ -357,6 +367,7 @@ Variant Object::get(const StringName &p_name, bool *r_valid) const {
 			return ret;
 		}
 	}
+	OS::get_singleton()->print("Object::get\n");
 
 	// Try built-in getter.
 	{
@@ -367,6 +378,7 @@ Variant Object::get(const StringName &p_name, bool *r_valid) const {
 			return ret;
 		}
 	}
+	OS::get_singleton()->print("Object::get\n");
 
 	if (p_name == CoreStringName(script)) {
 		ret = get_script();
@@ -375,6 +387,7 @@ Variant Object::get(const StringName &p_name, bool *r_valid) const {
 		}
 		return ret;
 	}
+	OS::get_singleton()->print("Object::get\n");
 
 	const Variant *const *V = metadata_properties.getptr(p_name);
 
@@ -397,6 +410,7 @@ Variant Object::get(const StringName &p_name, bool *r_valid) const {
 				return ret;
 			}
 		}
+	    OS::get_singleton()->print("Object::get\n");
 #endif
 		// Something inside the object... :|
 		bool success = _getv(p_name, ret);
@@ -415,16 +429,19 @@ Variant Object::get(const StringName &p_name, bool *r_valid) const {
 }
 
 void Object::set_indexed(const Vector<StringName> &p_names, const Variant &p_value, bool *r_valid) {
+	OS::get_singleton()->print("Object::set_indexed\n");
 	if (p_names.is_empty()) {
 		if (r_valid) {
 			*r_valid = false;
 		}
 		return;
 	}
+	OS::get_singleton()->print("Object::set_indexed\n");
 	if (p_names.size() == 1) {
 		set(p_names[0], p_value, r_valid);
 		return;
 	}
+	OS::get_singleton()->print("Object::set_indexed\n");
 
 	bool valid = false;
 	if (!r_valid) {
@@ -439,6 +456,7 @@ void Object::set_indexed(const Vector<StringName> &p_names, const Variant &p_val
 		value_stack.clear();
 		return;
 	}
+	OS::get_singleton()->print("Object::set_indexed\n");
 
 	for (int i = 1; i < p_names.size() - 1; i++) {
 		value_stack.push_back(value_stack.back()->get().get_named(p_names[i], valid));
@@ -451,6 +469,7 @@ void Object::set_indexed(const Vector<StringName> &p_names, const Variant &p_val
 			return;
 		}
 	}
+	OS::get_singleton()->print("Object::set_indexed\n");
 
 	value_stack.push_back(p_value); // p_names[p_names.size() - 1]
 
@@ -466,6 +485,7 @@ void Object::set_indexed(const Vector<StringName> &p_names, const Variant &p_val
 			return;
 		}
 	}
+	OS::get_singleton()->print("Object::set_indexed\n");
 
 	set(p_names[0], value_stack.back()->get(), r_valid);
 	value_stack.pop_back();
@@ -474,12 +494,14 @@ void Object::set_indexed(const Vector<StringName> &p_names, const Variant &p_val
 }
 
 Variant Object::get_indexed(const Vector<StringName> &p_names, bool *r_valid) const {
+	OS::get_singleton()->print("Object::get_indexed\n");
 	if (p_names.is_empty()) {
 		if (r_valid) {
 			*r_valid = false;
 		}
 		return Variant();
 	}
+	OS::get_singleton()->print("Object::get_indexed\n");
 	bool valid = false;
 
 	Variant current_value = get(p_names[0], &valid);

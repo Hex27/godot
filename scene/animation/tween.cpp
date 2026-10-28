@@ -611,6 +611,7 @@ void PropertyTweener::start() {
 }
 
 bool PropertyTweener::step(double &r_delta) {
+    OS::get_singleton()->print("PropertyTweener::step");
 	if (finished) {
 		// This is needed in case there's a parallel Tweener with longer duration.
 		return false;
@@ -652,6 +653,7 @@ bool PropertyTweener::step(double &r_delta) {
 			target_instance->set_indexed(property, Animation::interpolate_variant(initial_val, final_val, result));
 		} else {
 			target_instance->set_indexed(property, tween->interpolate_variant(initial_val, delta_val, time, duration, trans_type, ease_type));
+            //OS::get_singleton()->print("PropertyTweener::step: %s -> %s\n", initial_val.get_construct_string().ascii().ptr(),tween->interpolate_variant(initial_val, delta_val, time, duration, trans_type, ease_type).get_construct_string().ascii().ptr());
 		}
 		r_delta = 0;
 		return true;
